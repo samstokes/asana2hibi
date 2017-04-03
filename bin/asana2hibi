@@ -3,6 +3,7 @@
 $: << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'asana'
+require 'raven'
 require 'yaml'
 
 require './config/env'
@@ -15,6 +16,12 @@ asana = Asana::Client.new do |c|
 end
 
 hibi = Hibi::Client.new(HIBI_OPTS)
+
+if SENTRY_DSN
+  Raven.configure do |config|
+    config.dsn = SENTRY_DSN
+  end
+end
 
 asana_to_hibi = AsanaToHibi::Client.new(hibi: hibi, asana: asana)
 asana_to_hibi.sync

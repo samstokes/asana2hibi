@@ -26,6 +26,8 @@ GEM
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
     rack (2.0.1)
+    sentry-raven (2.1.2)
+      faraday (>= 0.7.6, < 0.10.x)
 
 PLATFORMS
   ruby
@@ -35,6 +37,7 @@ DEPENDENCIES
   dotenv
   faraday
   json
+  sentry-raven
 
 RUBY VERSION
    ruby 2.3.1p112

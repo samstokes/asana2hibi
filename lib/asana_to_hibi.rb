@@ -1,5 +1,6 @@
 require 'asana'
 require 'hibi'
+require 'raven'
 
 SECONDS_IN_A_DAY = 24 * 60 * 60
 
@@ -19,6 +20,8 @@ module AsanaToHibi
       active_synced_tasks = get_active_synced_tasks
 
       update_existing_hibi_tasks(active_synced_tasks, my_tasks)
+    rescue => e
+      Raven.capture_exception e
     end
 
     private
@@ -50,6 +53,7 @@ module AsanaToHibi
           @hibi.create_or_update_task(asana_task_to_hibi_task(task))
         rescue => e
           puts "Failed to update task #{task.id} (#{task.name}) to Hibi!\n#{e}"
+          Raven.capture_exception e
           errors << e
         end
       end
@@ -67,6 +71,7 @@ module AsanaToHibi
           @hibi.create_or_update_task(asana_task_to_hibi_task(task))
         rescue => e
           puts "Failed to sync task #{id} (#{task.name if task}) to Hibi!\n#{e}"
+          Raven.capture_exception e
           errors << e
         end
       end

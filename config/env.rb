@@ -11,3 +11,5 @@ HIBI_OPTS = {
   user: ENV.fetch('HIBI_USER'),
   password: ENV.fetch('HIBI_PASSWORD'),
 }
+
+SENTRY_DSN = ENV['SENTRY_DSN']
