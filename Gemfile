@@ -5,3 +5,5 @@ ruby '2.3.1'
 gem 'asana'
 gem 'faraday'
 gem 'json'
+
+gem 'dotenv', group: :development

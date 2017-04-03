@@ -6,6 +6,7 @@ GEM
       faraday_middleware (~> 0.9)
       faraday_middleware-multi_json (~> 0.0)
       oauth2 (~> 1.0)
+    dotenv (2.1.1)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.11.0.1)
@@ -31,6 +32,7 @@ PLATFORMS
 
 DEPENDENCIES
   asana
+  dotenv
   faraday
   json
 
