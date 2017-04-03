@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+$: << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
+
+require 'asana'
+require 'yaml'
+
+require './config/env'
+
+require 'hibi'
+require 'asana_to_hibi'
+
+asana = Asana::Client.new do |c|
+  c.authentication :access_token, ASANA_API_TOKEN
+end
+
+hibi = Hibi::Client.new(HIBI_OPTS)
+
+asana_to_hibi = AsanaToHibi::Client.new(hibi: hibi, asana: asana)
+asana_to_hibi.sync
