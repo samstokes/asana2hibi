@@ -32,8 +32,37 @@ module AsanaToHibi
 
       Asana::Task.find_all(@asana, assignee: :me, workspace: ASANA_WORKSPACE_ID,
                            completed_since: asana_time(yesterday),
-                           options: {fields: %w(name id completed assignee)}
-                          ).tap do |tasks|
+                           options: {
+                             fields: %w(
+                               name
+                               id
+                               completed
+                               assignee
+                               memberships.project.id
+                               memberships.section.id
+                               memberships.section.name
+                             )
+                           }
+                          )
+        .reject do |task|
+          if ASANA_MAIN_PROJECT_ID.nil?
+            false
+          elsif membership = task.memberships.detect {|ship| ship['project']['id'] == ASANA_MAIN_PROJECT_ID }
+            section = membership['section']
+            if !ASANA_MAIN_PROJECT_SECTION_ID
+              false
+            elsif section && ASANA_MAIN_PROJECT_SECTION_ID == section['id']
+              false
+            else
+              puts "Ignoring task #{task.id} (#{task.name}) because not in main section"
+              true
+            end
+          else
+            puts "Ignoring task #{task.id} (#{task.name}) because not in main project"
+            true
+          end
+        end
+        .tap do |tasks|
         puts "Got #{tasks.size} tasks from Asana: #{tasks.map(&:name).join(', ')}"
       end
     end
