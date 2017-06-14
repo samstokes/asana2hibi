@@ -41,6 +41,7 @@ module AsanaToHibi
                                memberships.project.id
                                memberships.section.id
                                memberships.section.name
+                               due_on
                              )
                            }
                           )
@@ -116,7 +117,13 @@ module AsanaToHibi
                       else
                         assignee['name']
                       end
-      status = task.completed ? 'done' : nil
+      status = if task.completed
+        'done'
+      elsif task.due_on
+        "due #{task.due_on}"
+      else
+        nil
+      end
       Hibi::Task.new(
         ext_id: task.id.to_s,
         title: task.name,
