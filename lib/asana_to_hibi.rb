@@ -38,6 +38,7 @@ module AsanaToHibi
                                id
                                completed
                                assignee
+                               assignee_status
                                memberships.project.id
                                memberships.section.id
                                memberships.section.name
@@ -47,7 +48,14 @@ module AsanaToHibi
                           )
         .reject do |task|
           if ASANA_MAIN_PROJECT_ID.nil?
-            false
+            if task.completed
+              false
+            elsif task.assignee_status != 'today' && task.assignee_status != 'upcoming'
+              puts "Ignoring task #{task.id} (#{task.name}) because scheduled for '#{task.assignee_status}'"
+              true
+            else
+              false
+            end
           elsif membership = task.memberships.detect {|ship| ship['project']['id'] == ASANA_MAIN_PROJECT_ID }
             section = membership['section']
             if !ASANA_MAIN_PROJECT_SECTION_ID
