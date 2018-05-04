@@ -13,19 +13,29 @@ require 'honeycomb-beeline/auto_install'
 require 'hibi'
 require 'asana_to_hibi'
 
-asana = Asana::Client.new do |c|
-  c.authentication :access_token, ASANA_API_TOKEN
-end
+SERVICE_NAME = :asana2hibi
 
-hibi = Hibi::Client.new(HIBI_OPTS)
+Honeycomb.with_trace_id do |trace_id|
+  span_id = trace_id # so this shows up as a root span
 
-if SENTRY_DSN
-  Raven.configure do |config|
-    config.dsn = SENTRY_DSN
+  Honeycomb.span(service_name: SERVICE_NAME, name: :run, span_id: span_id) do
+
+    asana = Asana::Client.new do |c|
+      c.authentication :access_token, ASANA_API_TOKEN
+    end
+
+    hibi = Hibi::Client.new(HIBI_OPTS)
+
+    if SENTRY_DSN
+      Raven.configure do |config|
+        config.dsn = SENTRY_DSN
+      end
+    end
+
+    asana_to_hibi = AsanaToHibi::Client.new(hibi: hibi, asana: asana)
+    asana_to_hibi.sync
+
   end
 end
-
-asana_to_hibi = AsanaToHibi::Client.new(hibi: hibi, asana: asana)
-asana_to_hibi.sync
 
 Honeycomb.client.close
