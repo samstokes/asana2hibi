@@ -8,6 +8,8 @@ require 'yaml'
 
 require './config/env'
 
+require 'honeycomb-beeline/auto_install'
+
 require 'hibi'
 require 'asana_to_hibi'
 
@@ -25,3 +27,5 @@ end
 
 asana_to_hibi = AsanaToHibi::Client.new(hibi: hibi, asana: asana)
 asana_to_hibi.sync
+
+Honeycomb.client.close
