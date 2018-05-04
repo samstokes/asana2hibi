@@ -8,5 +8,6 @@ gem 'json'
 gem 'sentry-raven'
 
 gem 'dotenv', group: :development
+gem 'pry-byebug', group: :development
 
 gem 'honeycomb-beeline'
