@@ -8,12 +8,14 @@ require 'yaml'
 
 require './config/env'
 
-require 'honeycomb-beeline/auto_install'
+require 'honeycomb-beeline'
 
 require 'hibi'
 require 'asana_to_hibi'
 
 SERVICE_NAME = :asana2hibi
+
+Honeycomb.init service_name: SERVICE_NAME
 
 Honeycomb.with_trace_id do |trace_id|
   span_id = trace_id # so this shows up as a root span
