@@ -143,6 +143,8 @@ module AsanaToHibi
         'done'
       elsif task.due_on
         "due #{task.due_on}"
+      elsif task.assignee_status == 'today'
+        'today'
       else
         nil
       end
