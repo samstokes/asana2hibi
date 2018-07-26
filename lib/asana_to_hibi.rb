@@ -141,6 +141,8 @@ module AsanaToHibi
                       end
       status = if task.completed
         'done'
+      elsif overdue?(task)
+        "overdue"
       elsif task.due_on
         "due #{task.due_on}"
       elsif task.assignee_status == 'today'
@@ -165,6 +167,11 @@ module AsanaToHibi
 
     def asana_task_url(task)
       "https://app.asana.com/0/#{ASANA_WORKSPACE_ID}/#{task.id}"
+    end
+
+    def overdue?(task)
+      return false unless task.due_on
+      Date.parse(task.due_on) < Date.today
     end
   end
 end
