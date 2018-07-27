@@ -143,10 +143,10 @@ module AsanaToHibi
         'done'
       elsif overdue?(task)
         "overdue"
-      elsif task.due_on
-        "due #{task.due_on}"
       elsif task.assignee_status == 'today'
         'today'
+      elsif task.due_on
+        "due #{task.due_on}"
       else
         nil
       end
