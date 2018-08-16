@@ -8,7 +8,7 @@ module Hibi
 
   class Task < OpenStruct
     def ext_inactive?
-      %w(Closed Completed).member?(ext_status)
+      %w(done).member?(ext_status)
     end
 
     def ext_active?
